@@ -29,4 +29,10 @@ public class PostController {
     public ResponseEntity<List<PostDTO>> findAll() {
         return new ResponseEntity<>(postService.findAll(), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer postId) throws CustomException {
+        postService.delete(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

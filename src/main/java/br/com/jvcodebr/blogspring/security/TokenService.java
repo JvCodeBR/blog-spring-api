@@ -1,10 +1,10 @@
 package br.com.jvcodebr.blogspring.security;
 
 import br.com.jvcodebr.blogspring.entity.UserEntity;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import br.com.jvcodebr.blogspring.exception.CustomException;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -55,27 +55,35 @@ public class TokenService {
         return BEARER + token;
     }
 
-    public UsernamePasswordAuthenticationToken isValid(String token) {
+    public UsernamePasswordAuthenticationToken isValid(String token) throws CustomException {
         if (token == null) {
             return null;
         }
 
         token = token.replace(BEARER, "");
 
-        Claims keys = Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+        try {
 
-        String email = keys.get(Claims.ID, String.class);
-        List<String> roles = keys.get(ROLES_KEY, List.class);
+            Claims keys = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
 
-        List<SimpleGrantedAuthority> roleList = roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+            String email = keys.get(Claims.ID, String.class);
+            List<String> roles = keys.get(ROLES_KEY, List.class);
 
-        return new UsernamePasswordAuthenticationToken(email,
-                null, roleList);
+            List<SimpleGrantedAuthority> roleList = roles.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .toList();
+
+            return new UsernamePasswordAuthenticationToken(email,
+                    null, roleList);
+
+        } catch (ClaimJwtException | MalformedJwtException e) {
+            throw new CustomException("Invalid token!", HttpStatus.FORBIDDEN);
+        }
+
+
     }
 
     public String getEmailFromToken() {

@@ -1,7 +1,7 @@
 CREATE TABLE "user"(
 	id INTEGER not NULL,
-	nickname VARCHAR(50) not NULL,
-	email VARCHAR(50) not null,
+	nickname VARCHAR(50) unique not NULL,
+	email VARCHAR(50) unique not null,
 	"password" VARCHAR(100) not null,
 	active INTEGER not null,
 	PRIMARY KEY(id)
@@ -23,7 +23,7 @@ CREATE TABLE "user_role"(
 CREATE TABLE "post"(
 	id INTEGER not NULL,
 	user_id integer not NULL,
-	post_date DATE not NULL,
+	post_date timestamp not NULL,
 	"content" VARCHAR(300) not null,
 	PRIMARY KEY(id),
 	foreign KEY(user_id) references "user"(id)

@@ -1,5 +1,6 @@
 package br.com.jvcodebr.blogspring.security;
 
+import br.com.jvcodebr.blogspring.exception.CustomException;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,7 +29,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             filterChain.doFilter(request, response);
-        }catch(ExpiredJwtException e) {
+        }catch(ExpiredJwtException | CustomException e) {
             response.setStatus(403);
         }
     }

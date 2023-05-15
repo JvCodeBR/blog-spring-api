@@ -42,10 +42,8 @@ public class SecurityConfiguration {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().antMatchers(
                 "/",
-                "/swagger-ui/index.html",
-                "/swagger-ui/swagger-initializer.js",
-                "/v3/api-docs/swagger-config",
-                "/v3/api-docs",
+                "/swagger-ui/**",
+                "/v3/api-docs/**",
                 "/user/auth",
                 "/user/register");
     }

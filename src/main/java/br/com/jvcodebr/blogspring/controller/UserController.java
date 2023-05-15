@@ -29,4 +29,9 @@ public class UserController {
     public ResponseEntity<UserDTO> register(@RequestBody UserCreateDTO userCreateDTO) throws CustomException {
         return new ResponseEntity<>(userService.register(userCreateDTO), HttpStatus.CREATED);
     }
+
+    @GetMapping("/logged-user")
+    public ResponseEntity<UserDTO> getLoggedUser() throws CustomException {
+        return new ResponseEntity<>(userService.getUserDtoFromToken(), HttpStatus.OK);
+    }
 }

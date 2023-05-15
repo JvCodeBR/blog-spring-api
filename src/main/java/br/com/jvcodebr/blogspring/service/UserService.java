@@ -3,6 +3,7 @@ package br.com.jvcodebr.blogspring.service;
 import br.com.jvcodebr.blogspring.dto.user.LoginUserDTO;
 import br.com.jvcodebr.blogspring.dto.user.UserCreateDTO;
 import br.com.jvcodebr.blogspring.dto.user.UserDTO;
+import br.com.jvcodebr.blogspring.entity.RoleEntity;
 import br.com.jvcodebr.blogspring.entity.UserEntity;
 import br.com.jvcodebr.blogspring.exception.CustomException;
 import br.com.jvcodebr.blogspring.repository.RoleRepository;
@@ -64,16 +65,28 @@ public class UserService {
         userEntity.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
         userEntity.setActive(true);
         userEntity.setRoles(Set.of(roleRepository.findById(2).get()));
-        UserDTO userDTO = objectMapper.convertValue(userRepository.save(userEntity), UserDTO.class);
-        userDTO.setRoles(userEntity.getRoles()
-                .stream()
-                .map(roleEntity -> roleEntity.getRole())
-                .collect(Collectors.toSet()));
-        return userDTO;
+
+        return entityToDTO(userRepository.save(userEntity));
     }
 
     public UserEntity getUserFromToken() throws CustomException {
         String email = tokenService.getEmailFromToken();
         return this.findByEmail(email);
     }
+
+    public UserDTO getUserDtoFromToken() throws CustomException {
+        String email = tokenService.getEmailFromToken();
+        return entityToDTO(this.findByEmail(email));
+    }
+
+    private UserDTO entityToDTO(UserEntity userEntity) {
+        UserDTO userDTO = objectMapper.convertValue(userRepository.save(userEntity), UserDTO.class);
+        userDTO.setRoles(userEntity.getRoles()
+                .stream()
+                .map(RoleEntity::getRole)
+                .collect(Collectors.toSet()));
+
+        return userDTO;
+    }
+
 }
