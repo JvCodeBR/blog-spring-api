@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((auth) -> auth
-                        .antMatchers("/post").hasAnyRole("CUSTOMER", "ADMIN")
+                        .requestMatchers("/post").hasAnyRole("CUSTOMER", "ADMIN")
                         .anyRequest().authenticated()
                 );
 
@@ -40,7 +40,7 @@ public class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers(
+        return web -> web.ignoring().requestMatchers(
                 "/",
                 "/swagger-ui/**",
                 "/v3/api-docs/**",

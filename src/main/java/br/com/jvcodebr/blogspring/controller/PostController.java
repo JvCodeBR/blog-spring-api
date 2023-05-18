@@ -30,6 +30,11 @@ public class PostController {
         return new ResponseEntity<>(postService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/user/{nickname}")
+    public ResponseEntity<List<PostDTO>> findAllByUser(@PathVariable("nickname") String nickname) throws CustomException {
+        return new ResponseEntity<>(postService.findAllByUser(nickname), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer postId) throws CustomException {
         postService.delete(postId);

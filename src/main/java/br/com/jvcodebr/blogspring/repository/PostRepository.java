@@ -10,4 +10,5 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<PostEntity, Integer> {
 
     List<PostEntity> findAllByOrderByPostDateDesc();
+    List<PostEntity> findAllByUserIdOrderByPostDateDesc(Integer userId);
 }

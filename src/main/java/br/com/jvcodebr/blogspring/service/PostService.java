@@ -38,6 +38,13 @@ public class PostService {
                 .toList();
     }
 
+    public List<PostDTO> findAllByUser(String nickname) throws CustomException {
+        UserEntity user = userService.findByNickname(nickname);
+        return postRepository.findAllByUserIdOrderByPostDateDesc(user.getId()).stream()
+                .map(this::convertEntityToDTO)
+                .toList();
+    }
+
     public void delete(Integer postId) throws CustomException {
         String emailFromToken = tokenService.getEmailFromToken();
 

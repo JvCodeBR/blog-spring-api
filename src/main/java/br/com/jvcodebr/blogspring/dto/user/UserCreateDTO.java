@@ -1,13 +1,22 @@
 package br.com.jvcodebr.blogspring.dto.user;
 
-import lombok.Data;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 
-@Data
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class UserCreateDTO {
     @NotBlank
     private String nickname;
+    @Email
     @NotBlank
     private String email;
     @NotBlank

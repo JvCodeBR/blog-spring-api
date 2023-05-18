@@ -34,7 +34,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public UserEntity findByEmail(String email) throws CustomException {
-        return userRepository.findByEmail(email).orElseThrow(() -> new CustomException("User not found", HttpStatus.NOT_FOUND));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException("User not found", HttpStatus.NOT_FOUND));
+    }
+
+    public UserEntity findByNickname(String nickname) throws CustomException {
+        return userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new CustomException("User not found", HttpStatus.NOT_FOUND));
     }
 
     public String auth(LoginUserDTO login) throws CustomException {
@@ -80,7 +86,7 @@ public class UserService {
     }
 
     private UserDTO entityToDTO(UserEntity userEntity) {
-        UserDTO userDTO = objectMapper.convertValue(userRepository.save(userEntity), UserDTO.class);
+        UserDTO userDTO = objectMapper.convertValue(userEntity, UserDTO.class);
         userDTO.setRoles(userEntity.getRoles()
                 .stream()
                 .map(RoleEntity::getRole)
